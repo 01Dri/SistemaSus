@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Senhas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="senhaText">Senha</div>
+    <div id="senha"></div>
+    <div id="outras-senhas" class="div1"></div>
+
+    <div id="guiches">
+        <div class="guiche1" id="guiche1">Guichê</div>
+            <div class="idGuiche" id="idGuiche"></div>
+
+      </div>
+    
+    
+    <script>
+        fetch('/senhas')
+            .then(response => response.json())
+            .then(senhas => {
+                console.log(senhas);
+
+                // Separa as senhas de tipo "P" das demais senhas
+                const senhasP = senhas.filter(senha => senha.tipoSenha === "P");
+                const outrasSenhas = senhas.filter(senha => senha.tipoSenha !== "P");
+
+                let i = 0;
+                let j = 0;
+
+                const mostrarSenha = (senha) => {
+                    const idSenha = senha.id;
+                    const tipoSenha = senha.tipoSenha;
+                    const guiche = senha.guiche;
+                    const resultado = idSenha + tipoSenha;
+
+                    const divSenha = document.createElement("div");
+                    divSenha.innerHTML = resultado;
+                    document.getElementById("senha").innerHTML = ""; //+ guiche.id;
+                    document.getElementById("senha").appendChild(divSenha);
+
+                    let div = document.getElementById("idGuiche");
+                    div.textContent = guiche.id;
+
+
+    
+                    // Aguarda 5 segundos antes de remover a senha da tela
+                    setTimeout(() => {
+                        divSenha.remove();
+                        mostrarProximaSenha();
+                    }, 5000);
+                };
+
+                const mostrarProximaSenha = () => {
+                    if (i < senhasP.length) {
+                        mostrarSenha(senhasP[i]);
+                        i++;
+                    } else {
+                        i = 0;
+                        if (j < outrasSenhas.length) {
+                            mostrarSenha(outrasSenhas[j]);
+                            j++;
+                        } else {
+                            j = 0;
+                        }
+                    }
+                };
+
+                mostrarProximaSenha();
+                setInterval(mostrarProximaSenha, 10000);
+            })
+            .catch(error => console.log(error));
+    </script>
+
+</body>
+</html>

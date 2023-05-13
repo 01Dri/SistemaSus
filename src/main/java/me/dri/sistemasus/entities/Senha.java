@@ -1,13 +1,11 @@
 package me.dri.sistemasus.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import me.dri.sistemasus.entities.enums.TipoSenha;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -32,6 +30,10 @@ public class Senha {
     @OneToOne
 
     private Paciente paciente;
+
+
+    @OneToOne
+    private Guiche guiche;
 
 
     public Senha() {
@@ -65,6 +67,14 @@ public class Senha {
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
+    }
+
+    public Guiche getGuiche() {
+        return guiche;
+    }
+
+    public void setGuiche(Guiche guiche) {
+        this.guiche = guiche;
     }
 }
 
